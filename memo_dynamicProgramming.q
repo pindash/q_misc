@@ -62,6 +62,21 @@ dp[g1;0;n-1;] over ()
 
 
 
+/words retrevied from https://raw.githubusercontent.com/dwyl/english-words/master/words.txt
+words:read0 `:/data01/home/dashevsp/projects/workspace/words.txt
+/remove words with silly characters and make all letters lowercase
+words:trim lower words 
+clean:words where all peach (words) in .Q.a
+freq:{asc[key x]#x:count each group x}
+res:(.Q.a!count[.Q.a]#0)+/freq peach clean
+res~freq raze clean
+ngram:{trim flip til[x]xprev\:y}
+freq raze ngram[2] peach clean
+
+
+
+
+
 minPath[g2;state]
 graph,`id`id2`d!(0 9 2880)
 g2:(graph,`id`id2`d!(10 9 2820)),`id`id2`d!(0 10 51)
@@ -339,6 +354,9 @@ flatten:{[n]
 /EGYPTIAN DIVISION with Remainder
 
 {last (0;y){$[x[1]>=y;(1;x[1]-y);(0;x[1])]}/reverse first flip (.[{($[y>=x;x+x;x];y)}]\) (x;y)}[6;10]
+
+
+
 
 
 
