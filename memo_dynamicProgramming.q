@@ -358,5 +358,17 @@ flatten:{[n]
 
 
 
+Faster Version of As of Join by joining symbols and peaching
+aj[`s`n;`s xasc t1;`s xasc t2]
+t1:([]s:n?`4;n:n?n;v:n?1.0)
+t2:([]s:n?`4;n:n?n;v:n?1.0)
+ff:{[k;t1;t2]
+ n:last k;
+ k:-1 _ k;
+ t2s:(k xgroup t2);
+ t1s:(k xgroup t1);
+ f2d:{[f;x](f (::)x') peach til count x 0 }; 
+
+
 
 
