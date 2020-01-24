@@ -56,7 +56,21 @@ fifoIterative:{[o]
   a};
  last iterate/[(0;();sm 1 1#0);0N 500#o]
  }
-   
+/remove as many conditionals as possible and do all the unindexing at the last step
+fifoIterative2:{[o]
+ signed:abs o unindex:group signum o;
+ iterate:{[a;b;s]
+ t:sm m:deltas each deltas sums[b:a[1;`b],b]&\:sums s:a[1;`s],s;
+ c:(sum .[m;] ::) each 2 2#(::),i:last[t][`col`row];
+ a[1]:`s`b!.[i _' (s;b);(::;0);-;c];
+ a[2],:update row+a[0;`b], col+a[0;`s] from t;
+ a[0]+:(`s`b!(count[s];count[b]))-count each a[1];
+ a};
+ k:max div[;200] count each signed;
+ update row:unindex[1]row,col:unindex[-1] col from
+  last iterate/[(`s`b!(0;0);`s`b!(();());sm 1 1#0);(k;0N)#signed 1;(k;0N)#signed -1]
+} 
+
 /
 The previous iterative approach still takes n^2 space each iteration, but it is capped for most cases. 
  it now scales to millions of orders
