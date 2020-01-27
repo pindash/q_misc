@@ -60,8 +60,8 @@ fifoIterative:{[o]
 fifoIterative2:{[o]
  signed:abs o unindex:group signum o;
  iterate:{[a;b;s]
- t:sm m:deltas each deltas sums[b:a[1;`b],:b]&\:sums s:a[1;`s],:s;
- if[0=count t;:a]
+ if[any 0=count each (b:a[1;`b],:b;s:a[1;`s],:s);:a];
+ t:sm m:deltas each deltas sums[b]&\:sums s;
  c:(sum .[0^m;] ::) each 2 2#(::),i:last[t][`col`row];
  a[1]:`s`b!.[i _' (s;b);(::;0);-;c];
  a[2],:update row+a[0;`b], col+a[0;`s] from t;
