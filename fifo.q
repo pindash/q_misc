@@ -213,3 +213,16 @@ inputSize f             time  space
 950000    fastFifo      11691 110101408
 1000000   fifoIterative 9906  58713408 
 \
+
+
+
+/ another version in the traditional vain:
+fifoMinState:{[o]
+ signed:abs o unindex:group signum o;
+ f:{[B;S;b;s;a;rb;rs]
+   bq:rb+not[rb]*B[b];sq:rs+not[rs]*S[s];
+   (count[B]&b+bq<=sq;count[S]&s+sq<=bq;0|bq&sq;0|bq-sq;0|sq-bq)
+    }[b:signed 1;s:signed -1];
+   {delete from x where 0=0^val}
+   update row:unindex[1] row, col:unindex[-1] col, next val from  
+   flip `row`col`val!3#flip .[f] scan 5#0}
