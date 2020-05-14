@@ -1,5 +1,11 @@
 .memo.M:{[f] .memo.f[f]:()!(); {[f;x]$[x in key .memo.f[f];.memo.f[f;x];:.memo.f[f;x]:f[x]]}[f]}
 .memo.f:()!()
+.memo.MM:{[f] 
+        c:count[value[f] 1];
+        .memo.f[f]:enlist[()]!enlist ();
+        memof:{[f;x]$[x in key .memo.f[f];.memo.f[f;x];:.memo.f[f;x]:f . x]}[f];
+        {'[x;eval(enlist),y#(value (;))(),1]}[memof;c]}/multivalent version
+
 fib:.memo.M 
 \t (fib:{$[0=x;1;x=1;1;fib[x-1]+fib[x-2]]}) 30
 \t (fib:.memo.M {$[0=x;1;x=1;1;fib[x-1]+fib[x-2]]}) 30
