@@ -14,3 +14,10 @@ f:{[t]
  im:first where t[([]w:k);`s]>s:tw[k:tm cm]iifin\: cm;
  t upsert (k im;cm;s im)}
 pairs:f over t
+
+
+/alternatives to implement
+/http://dcs.gla.ac.uk/~pat/jchoco/roommates/papers/Comp_sdarticle.pdf
+/Knuth book on the topic Stable-Marriage
+/https://www-cs-faculty.stanford.edu/~knuth/mariages-stables.pdf
+/https://www.amazon.com/Stable-Marriage-Relation-Combinatorial-Problems/dp/0821806033
