@@ -21,6 +21,7 @@ pairs:f over t
 /Knuth book on the topic Stable-Marriage
 /https://www-cs-faculty.stanford.edu/~knuth/mariages-stables.pdf
 /https://www.amazon.com/Stable-Marriage-Relation-Combinatorial-Problems/dp/0821806033
+/https://www.cs.cmu.edu/~arielpro/15896s16/slides/896s16-16.pdf
 
 
 /vectorized version
