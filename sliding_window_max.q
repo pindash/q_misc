@@ -15,4 +15,6 @@ fast_mmax:{[k;n]l:raze maxs each w:(0N;k)#n;r:raze (reverse maxs reverse ::) eac
 /test
 all {a:-20+50?40;b:1+rand 50;if[c:not fast_mmax[b;a]~mmax[b;a];`a`b set' (a;b)];not c}\[10000;1b]
 
+/k4 version
+mmax1:{l:,/|\'w:(0N;x)#y;r:,/(||\|::)'w;l|r(!#r)-(x-1)}
 
