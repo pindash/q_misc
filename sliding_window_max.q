@@ -27,7 +27,6 @@ Python solution
 import numpy as np 
 def maxSlidingWindow(k,nums)
   cmax=np.maximum.accumulate
-  #n=np.array(nums)
   n=len(nums)
   z=np.zeros(k*np.ceil(n/k).astype(int))
   z[:n]=nums
