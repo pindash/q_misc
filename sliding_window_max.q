@@ -20,6 +20,9 @@ mmax1:{l:,/|\'w:(0N;x)#y;r:,/(||\|::)'w;l|r(!#r)-(x-1)}
 
 
 
+/generic q solution, supports max/min/fill
+fmx:{[f;g;h;m;x]l:raze (f')w:(0N;m)#x;r:raze (g')w;h[l;(m-1) xprev r]}
+mmfill:fmx[fills;(reverse ({y^x}\) reverse ::);{y^x}]
 
 
 /
