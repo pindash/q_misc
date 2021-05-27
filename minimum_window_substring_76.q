@@ -24,3 +24,7 @@ hp:{[s;t]raze[k[t]],'raze {[k;t]max k[t] {0W^y first where y>x}\:/: value t _ k}
 h1:{[s;t]
  trv:{[x;y;z]k:0^first[y];i:first where (x:k _ x)>z;(i+k;0W^x i)};
  raze[k t],'raze {[f;x;y]max flip (last'')(f'[y])\[0;x]}[trv]'[k t;value each t _\: k:t#group s]}
+ 
+ 
+/shorter and parallel
+l3:{[s;t]min(-/)({max 0W^x@'(first where ::)each x>y}[k] peach c;c:raze k:value t#group s)}
