@@ -47,3 +47,10 @@ x
    	/ clearedShares are found by keying x on id and then selecting all ids that we found in clearId
    	 res:update 0^partialQty from res lj select partialQty:neg sum qty by sym from (`id xkey x)[select id:raze clearId from res];
    	 res
+	 
+	 
+	
+l:([]p:1+10?100;q:-5+10?10)
+s:update cs:sums abs q, s:p from `p xdesc select from l where q<0
+b:update cb:sums q, b:p from `p xasc select from l where q>0
+`b`s`c#first `c xdesc update c:cb&cs from aj[`p;s;b] /nbbo and cleared shares
