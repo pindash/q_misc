@@ -7,10 +7,19 @@ dfs:{[visted;e] if[0=count e;:(visted;e)];x:first visted; n:first (e i:first whe
 me:(til[count edges]!edges)
 dftrav:{x where (>':) count each x }first each dfs scan (rand parents;me)
 dfnodes:first cp:flip 2#'dftrav
+far:first dftrav {x?max x}count each dftrav
+longestpath:{x {x?max x} count each x }first each dfs scan (far;me)
+minheigtnodes:{$[mod[c:count x;2];x c div 2;x -1 0+ c div 2]} longestpath
+
+
+
+
+
+/other tree functions
 pv:dfnodes ?last cp
-components:0!([cid:til count leaves]elems:enlist each leaves;ancestor:dfnodes pv dfnodes?leaves)
 levelup:{dfnodes pv dfnodes?x} 
 dfnodes!count each distinct each flip levelup scan dfnodes
+components:0!([cid:til count leaves]elems:enlist each leaves;ancestor:dfnodes pv dfnodes?leaves)
 mergecomponents:{[x]
  t:update elems:(elems,'ancestor),levelup ancestor from x;
  cidm:exec raze elems by cid from t;
