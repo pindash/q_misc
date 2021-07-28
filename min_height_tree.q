@@ -14,6 +14,22 @@ minheigtnodes:{$[mod[c:count x;2];x c div 2;x -1 0+ c div 2]} longestpath
 
 
 
+/Create Random Tree from Prufer sequence:
+prufer2tree:{
+    deg:@[count[g:til 2+count x]#0;x;+;1];
+    ds:{[g;d;e]@[d;e,d[g]?0;-;1]}[g]\[deg;x];
+    tree:(x;(enlist[deg],-1 _ ds)?\:0);
+    tree,'reverse 2 1#where not last ds}
+
+/the parent vector from an edge list is just
+edges:flip prufer2tree 1+til 4
+nodes:distinct raze edges:asc each edges
+pv:@[count[nodes]#0;nodes?last flip edges;:;nodes?first flip edges]
+/test if this converges and show node labels
+nodes pv scan til count nodes
+
+
+
 
 /other tree functions
 pv:dfnodes ?last cp
