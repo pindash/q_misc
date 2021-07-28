@@ -20,6 +20,17 @@ prufer2tree:{
     ds:{[g;d;e]@[d;e,d[g]?0;-;1]}[g]\[deg;x];
     tree:(x;(enlist[deg],-1 _ ds)?\:0);
     tree,'reverse 2 1#where not last ds}
+/shorter prufer tree
+prufer2tree:{[s]
+ l:@[(2+count[s])#1;s;+;1];
+ t:(s;(-1 _ ll:(1 0N#l),{@[x;y,x?1;-;1]}\[l;s])?\:1);
+ t,'2 1#where last ll}
+/slow prufer tree
+prufer2treeslow:{[s]
+   f:.[{[i;l;s](i;l except i:first l except s;1 _ s)}];
+   t:s,'first each r:-3 _ 1 _ f scan (0N;til 2+count s;s);
+   t,enlist last[r] 1}
+
 
 /the parent vector from an edge list is just
 edges:flip prufer2tree 1+til 4
