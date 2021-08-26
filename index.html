@@ -1,2 +1,56 @@
-# q_misc
-Random Q things I've attempted
+<html>
+<!doctype html>
+<html>
+  <head>
+    <title>Plot Q</title>
+  </head>
+ <!-- Compiled and minified CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+<!-- Compiled and minified JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<script src="../kdb/c.js"></script>
+<script src="https://cdn.plot.ly/plotly-2.3.0.min.js"></script>
+<body>
+<main>
+<div id="plotly" style="width:50%; height:85%;"></div>
+</main>
+<footer class="page-footer">
+ <form action="">
+  <input type="button"        value="connect"   onclick="connect()"    >
+  <input type="button"        value="close"     onclick="ws.close()"   >
+ </form>
+<textarea id="out" rows=1 cols=80></textarea>
+</footer>
+
+<script> 
+var plotlyQueue=[];
+function plotlyClearQueue(data){ plotlyQueue.splice(0, plotlyQueue.length)}
+
+function plotly(data){ 
+    console.log(data);
+    plotlyQueue.push(data);}
+function plotlyPlot(){
+  if(plotlyQueue.length > 0){
+    data=plotlyQueue.shift();
+    Plotly.newPlot('plotly', data.data, data.layout);
+  }
+}
+setInterval(plotlyPlot, 100);
+
+var ws,out=document.getElementById("out");
+function connect()
+{if ("WebSocket" in window)
+ {var l = window.location;ws = new WebSocket("ws://" + (l.hostname ? l.hostname : "localhost") + ":" + (l.port ? l.port : "5000") + "/"); 
+  ws.binaryType='arraybuffer';
+  out.value="connecting..." ;
+  ws.onopen=function(e){out.value="connected";} 
+  ws.onclose=function(e){out.value="disconnected";}
+  ws.onmessage=function(e){d=deserialize(e.data);window[d[0]](d[1])}
+  ws.onerror=function(e){out.value=deserialize(e.data);}
+ }else alert("WebSockets not supported on your browser.");
+}
+connect();
+</script>
+</body>
+</html>
