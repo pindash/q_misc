@@ -25,7 +25,7 @@
      if[not A ~ agg; V: A each V];
     key[G]!flip(C:f[v]P:flip value flip key F)! V
   }
-til 10
+
 .utils.pivot:{[t]
  u:`$string asc distinct last f:flip key t;
  pf:{x#(`$string y)!z};
