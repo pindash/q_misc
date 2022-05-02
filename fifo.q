@@ -65,7 +65,7 @@ fifoIterative2:{[o]
  c:(sum .[0^m;] ::) each 2 2#(::),i:last[t][`col`row];
  a[1]:`s`b!.[i _' (s;b);(::;0);-;c];
  a[2],:update row+a[0;`b], col+a[0;`s] from t;
- a[0]+:(`s`b!(count[s];count[b]))-count each a[1];
+ a[0]+:`s`b!i;
  a};
  k:max div[;200] count each signed;
  update row:unindex[1]row,col:unindex[-1] col from
