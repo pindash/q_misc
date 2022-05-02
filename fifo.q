@@ -226,3 +226,102 @@ fifoMinState:{[o]
    {delete from x where 0=0^val}
    update row:unindex[1] row, col:unindex[-1] col, next val from  
    flip `row`col`val!3#flip .[f] scan 5#0}
+
+/
+#python version	
+import numpy as np
+import pandas as pd
+from functools import partial
+
+def next_n(a,n=2):
+    i=0
+    def nn(a,n,nil=0):
+        nonlocal i
+        r=np.arange(i,i+n)
+        i+=n
+        return a[r[np.where(r<a.size)]]
+    return partial(nn,a,n)
+vfifo=lambda b,s: np.diff(np.diff(np.pad((np.minimum.outer(np.cumsum(b),np.cumsum(s))),pad_width=(1,0)),axis=0))
+def fifo_iterate(b,s,n):
+    state={'b_lx':0,'s_lx':0,'b':b.take(()),
+                        's':s.take(()),
+                        'm':{'b_ix':np.arange(0),
+                             's_ix':np.arange(0),
+                             'm':b.take(())}}
+    bs=next_n(b,n)
+    ss=next_n(s,n)
+    state['b']=np.concatenate([state['b'],bs()])
+    state['s']=np.concatenate([state['s'],ss()])
+    while(all([sum(state[x]) for x in 'bs'])): #there are both buys and sells left to match
+        r=vfifo(state['b'],state['s']) #run vector fifo
+        nzr=r.nonzero()
+        if r[nzr].size==0:
+            state['b']=np.concatenate([state['b'],bs()])
+            state['s']=np.concatenate([state['s'],ss()])
+            continue
+        m=state['m']
+        state['m']={'b_ix':np.concatenate([m['b_ix'],state['b_lx']+nzr[0]]), #add allocated matches
+                    's_ix':np.concatenate([m['s_ix'],state['s_lx']+nzr[1]]),
+                    'm':np.concatenate([m['m'],r[nzr]])}
+        state['b']=state['b'][nzr[0][-1]:] #remove allocated buys
+        state['s']=state['s'][nzr[1][-1]:] #remove allocated sells
+        state['b'][0]-=r[nzr[0][-1]].sum() #subtract last partial alloc buy
+        state['s'][0]-=r.T[nzr[1][-1]].sum() #subtract last partial alloc sell
+        state['b_lx']+=nzr[0][-1]
+        state['s_lx']+=nzr[1][-1]
+        state['b']=np.concatenate([state['b'],bs()])
+        state['s']=np.concatenate([state['s'],ss()])
+    return state
+
+def fifo_allocate(buys,sells,quantity_col='q',batch=256):
+    m=fifo_iterate(buys[quantity_col].values,sells[quantity_col].values,batch)['m']
+    buys=pd.DataFrame.add_prefix(buys,"b_")
+    sells=pd.DataFrame.add_prefix(sells,"s_")
+    nzr=(m['b_ix'],m['s_ix'])
+    ds=[buys.iloc[m['b_ix']].reset_index(drop=True),
+     sells.iloc[m['s_ix']].reset_index(drop=True)
+     ,pd.DataFrame({'allocations':m['m']})]
+    result=pd.concat(ds,axis=1)
+    return result
+
+
+#find profitable trades
+buys=pd.DataFrame({"id":[2,3,4,5,9],"shares":[100,200,200,100,400],"px":[9,10,12,11,10]})
+sells=pd.DataFrame({"id":[0,1,6,7,8],"shares":[400,300,200,300,300],"px":[11,8,12,11,11]})
+buys=buys.sort_values('px',ascending=True)
+sells=sells.sort_values('px',ascending=False)
+matches=fifo_allocate(buys,sells,quantity_col='shares')
+print(matches)
+matches['pnl']=(matches.s_px-matches.b_px)*matches.allocations
+matches[matches['pnl']>0]
+
+
+
+def genrandtrades(n):
+    return pd.DataFrame({"id":np.arange(n),"shares":np.random.randint(100,1000,n),"px":10*(1+np.random.rand(n))})
+
+
+def testourfunc(n):
+    buys=genrandtrades(np.random.randint(5,n,1)[0])
+    sells=genrandtrades(np.random.randint(5,n,1)[0])
+    return all(fifo_allocate(buys,sells,quantity_col='shares')==fifo_allocate_n2space(buys,sells,quantity_col='shares'))n=1000000
+n=500000
+buys=genrandtrades(n)
+sells=genrandtrades(n)
+%timeit fifo_allocate(buys,sells,quantity_col='shares',batch=256)
+
+
+'''
+naive version for testing
+def fifo_allocate_n2space(buys,sells,quantity_col='q'):
+    vfifo=lambda b,s: np.diff(np.diff(np.pad((np.minimum.outer(np.cumsum(b),np.cumsum(s))),pad_width=(1,0)),axis=0))
+    r=vfifo(buys[quantity_col].values,sells[quantity_col].values)
+    buys=pd.DataFrame.add_prefix(buys,"b_")
+    sells=pd.DataFrame.add_prefix(sells,"s_")
+    nzr=r.nonzero()
+    ds=[buys.iloc[nzr[0]].reset_index(drop=True),
+     sells.iloc[nzr[1]].reset_index(drop=True)
+     ,pd.DataFrame({'allocations':r[nzr]})]
+    result=pd.concat(ds,axis=1)
+    return result
+'''
