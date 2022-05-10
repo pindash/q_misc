@@ -39,9 +39,10 @@ where 0<>{exec sum t from g over o:lam update t:0 from x} each o:genO each 1+100
 /h add limits
 h:{[hl;o]
    o:lam update t:0 from o;
-   limiter:{[hl;x] update q:0 from x where hl<=abs sums t,signum[p]=signum sums t}[hl];
+   limiter:{[hl;x] update q:0 from x where hl=abs sums t,signum[p]=signum sums t}[hl];
    gprime:(')[limiter;g];
-   gprime over o}
+   gprime/[{[hl;x]hl>exec max abs sums t from x}[hl];o]}
+
 
 o1:update q+count[i]?3,t:0 from genO 10
 h[2;o1]
