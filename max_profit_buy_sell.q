@@ -46,7 +46,9 @@ h:{[hl;o]
 
 o1:update q+count[i]?3,t:0 from genO 10
 h[2;o1]
-
+/add illustrative example
+o2:update q+count[i]?10,t:0 from ([]p:1 -2 1 -2 1 -2 10 -11 10 -11 10 -11;q:1)
+h[2;o2]
 
 
 
