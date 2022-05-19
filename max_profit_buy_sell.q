@@ -51,5 +51,18 @@ o2:update q+count[i]?10,t:0 from ([]p:1 -2 1 -2 1 -2 10 -11 10 -11 10 -11;q:1)
 h[2;o2]
 
 
+/solution with capacity c
+f:{[st;c]b:(q:til 1+c`q)*c`b;s:q*c`s;k:key st;v:value st;
+   pb:(k+/:q)!'v-/:b;ps:(k-/:q)!'v+/:s;max k#/:pb,ps}
+/example:
+genO:{([]p:(x?-1 1)*1+x?20;q:1+x?3)} /generate orders
+gp:{[o;s]@[0N*o`p;where c;:;abs o[`p] where c:(o[`q]>0)&s=signum o`p]}/split buys/sells
+o:update s:-0w^gp[o;-1],b:0w^gp[o;1] from o:genO 10; /table of orders o
+c:2 /capacity
+state:@[;0;:;0.0](neg[c]+til 1+2*c)!(1+2*c)#0n /initial state
+o,'flip (`$string[key state])!flip value each f\[state;o]
+
+
+
 
 
