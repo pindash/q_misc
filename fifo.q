@@ -131,7 +131,7 @@ fastFifo:{[o]
     delete A,B,S from `.fifo;
    res}
 
-/We now right a small test harness to print the table 
+/We now write a small test harness to print the table 
 fs:`n`n2`fifoIterative`traditionalFifo`fastFifo /the functions we want to test
 I:1000*1 2 5 10 20 50  /number elements in each test
 orders:{(`$"o",string[count x]) set x} each genOrders each I /create globals to test with
