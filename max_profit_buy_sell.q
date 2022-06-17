@@ -63,6 +63,10 @@ state:@[;0;:;0.0](neg[c]+til 1+2*c)!(1+2*c)#0n /initial state
 o,'flip (`$string[key state])!flip value each f\[state;o]
 
 
+/
+dp:{[k;o]f:{[x;s;p;q]n:x 1;p:p*q:s*til q;(s*flip[m]?'n;n:max m:p+q xprev\:n)};
+ n:(c:1+2*k)#0n;n[k]:0.;r:reverse first each f\[(c#0;n);o`side;neg o`px;c&1+o`qty];
+ deltas reverse {y-z x+y}[k]\[0;r]}
 
 
 
