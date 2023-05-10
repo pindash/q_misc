@@ -21,3 +21,28 @@ getseam3d:minseam sobel3d::
 showseam:{x {@[x;y;:;0xff]}' minseam sobel x}
 conv9:{raze each count[first x]#/:/:raze 2(1 0 -1 xprev/:\:)/x}
 sob:{shape[y]#sqrt sum{x*x}raze'[(x;flip x)]wsum\:conv9 y}[s]
+
+
+
+removeseam:{(m@'til[count first m]except/:s;last[x],enlist s:minseam sob m:first x)}
+e:@[;19] flip last 30 removeseam/(im;())
+
+(@'[;til 30]sums 6h$e<=\:e;til[30]#'e</:e;e)
+
+{(x[0] except y;x[1],x[0]?y)}\[(til 10;());8 1 9 5 4]
+0 1 2 3 4 5 6 7 9 ,8       
+0 2 3 4 5 6 7 9   8 1      
+0 2 3 4 5 6 7     8 1 7    
+0 2 3 4 6 7       8 1 7 4  
+0 2 3 6 7         8 1 7 4 3
+
+{x<='til[count x]#\:x}e
+
+({y except x}':) enlist[til 10],{x til[count x] except y}\[til 10;8 1 7 3]
+
+e:8 1 7 3
+f:{-1+@'[;til count x]7h$sums x<=\:x}
+g:{{x,y+y in x} over x+f x}
+g 8 1 7 4 3
+
+
