@@ -72,3 +72,7 @@ dp:{[k;o]f:{[x;s;p;q]n:x 1;p:p*q:s*til q;(s*flip[m]?'n;n:max m:p+q xprev\:n)};
 dp:{[k;o]f:{[x;p;q]n:x 1;(flip[m]?'n;n:max m:flip p+q xprev\:n)};n:(c:1+2*k)#0n;n[k]:0.;
  r:reverse o[`side]*first each f\[(c#0;n);neg q*o`px;q:o[`side]*til each c&1+o`qty];
  deltas reverse {y-z x+y}[k]\[0;r]}
+ 
+ 
+/aw
+{[p;k]|/(|\p-&\p-)/[k;0]}
